@@ -16,13 +16,14 @@ app.use('/api/users', userRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/email', emailRouter)
 
-mongoDb.connect(process.env.MONGODB, {
-     useNewUrlParser: true,
-     useUnifiedTopology: true
-}).then(() => {
-    console.log(`Backend Connected Well`)
-    const PORT = 5000
+mongoDb.connect(process.env.MONGODB)
+  .then(() => {
+    console.log(`✅ Backend Connected to MongoDB`);
+    const PORT = 5000;
     app.listen(PORT, () => {
-        console.log(`Server Running On ${PORT} Port`);
-    })
-})
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err);
+  });
