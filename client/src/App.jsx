@@ -26,9 +26,10 @@ function App() {
   return (
     <>
 
-      <AuthProvider>
+
         <ShopContextProvider>
-          <Navbar />
+          <AuthProvider>
+            <Navbar />
 
           <Routes>
             <Route path='/' element={<Home />} />
@@ -50,9 +51,9 @@ function App() {
           </Routes>
 
           <Footer />
+        </AuthProvider>
+      </ShopContextProvider>
 
-        </ShopContextProvider>
-      </AuthProvider>
     </>
   )
 }

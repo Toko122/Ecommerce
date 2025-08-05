@@ -77,7 +77,7 @@ const SelectedItems = () => {
                             <span className='w-full md:w-20 text-center'>{item.quantity}</span>
                             <span className='w-full md:w-20 text-center'>${(product.new_price * item.quantity).toFixed(2)}</span>
                             <button
-                                className='w-full md:w-20 text-red-500 hover:underline text-center'
+                                className='w-full md:w-20 text-red-500 hover:underline text-center cursor-pointer'
                                 onClick={() => removeCart(item.productId)}
                             >
                                 Remove
