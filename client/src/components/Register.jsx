@@ -53,37 +53,40 @@ const Register = () => {
     } catch (err) {
       const errorMsg = err.response?.data
 
-  if (errorMsg === 'user already exist') {
-    setEmailError(errorMsg)
-    setTimeout(() => setEmailError(''), 2000)
-  }
+      if (errorMsg === 'user already exist') {
+        setEmailError(errorMsg)
+        setTimeout(() => setEmailError(''), 2000)
+      }
 
-  if (errorMsg === 'user already exist') {
-    setUsernameError(errorMsg)
-    setTimeout(() => setUsernameError(''), 2000)
-  }
+      if (errorMsg === 'user already exist') {
+        setUsernameError(errorMsg)
+        setTimeout(() => setUsernameError(''), 2000)
+      }
 
-  console.log('error register', err)
+      console.log('error register', err)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className='bg-[#f0c3f6] w-full h-screen flex justify-center items-center'>
-      <form onSubmit={handleSubmit} className='bg-white py-8 px-10 flex flex-col justify-start gap-4 pb-24'>
-        <h1 className='font-semibold text-2xl'>Register</h1>
+    <div className='bg-[#f0c3f6] w-full min-h-screen flex justify-center items-center px-4'>
+      <form
+        onSubmit={handleSubmit}
+        className='bg-white w-full max-w-md py-8 px-6 md:px-10 flex flex-col justify-start gap-4 rounded-xl shadow-md'
+      >
+        <h1 className='font-semibold text-2xl text-center'>Register</h1>
 
         <input
           onChange={handleChange}
           name='email'
           type='email'
           placeholder='Email'
-          className='mt-2 border py-3 px-2 outline-none border-[#908f8f] w-full'
+          className='mt-2 border py-3 px-3 outline-none border-[#908f8f] w-full rounded-md'
           value={form.email}
         />
         {emailError && (
-          <p className='w-full p-2 bg-[rgba(249,103,103,0.7)] text-white font-semibold'>
+          <p className='w-full p-2 bg-[rgba(249,103,103,0.7)] text-white font-semibold rounded-md'>
             {emailError}
           </p>
         )}
@@ -93,12 +96,11 @@ const Register = () => {
           name='username'
           type='text'
           placeholder='Username'
-          className='mt-2 border py-3 px-2 outline-none border-[#908f8f] w-full'
+          className='border py-3 px-3 outline-none border-[#908f8f] w-full rounded-md'
           value={form.username}
         />
-
         {usernameError && (
-          <p className='w-full p-2 bg-[rgba(249,103,103,0.7)] text-white font-semibold'>
+          <p className='w-full p-2 bg-[rgba(249,103,103,0.7)] text-white font-semibold rounded-md'>
             {usernameError}
           </p>
         )}
@@ -108,11 +110,11 @@ const Register = () => {
           name='password'
           type='password'
           placeholder='Password'
-          className='border py-3 px-2 outline-none border-[#908f8f] w-full'
+          className='border py-3 px-3 outline-none border-[#908f8f] w-full rounded-md'
           value={form.password}
         />
         {passwordError && (
-          <p className='w-full p-2 bg-[rgba(249,103,103,0.7)] text-white font-semibold'>
+          <p className='w-full p-2 bg-[rgba(249,103,103,0.7)] text-white font-semibold rounded-md'>
             {passwordError}
           </p>
         )}
@@ -120,16 +122,14 @@ const Register = () => {
         <button
           type='submit'
           disabled={loading}
-          className='w-[432px] bg-red-600 py-2 px-4 text-white text-[20px] cursor-pointer disabled:opacity-50'
+          className='w-full bg-red-600 py-3 px-4 text-white text-[18px] rounded-md hover:bg-red-700 transition disabled:opacity-50'
         >
           {loading ? 'Loading...' : 'Continue'}
         </button>
 
-        
-
-        <span>
-          Already have account?{' '}
-          <Link to='/login' className='cursor-pointer font-medium text-indigo-500'>
+        <span className='text-center'>
+          Already have an account?{' '}
+          <Link to='/login' className='cursor-pointer font-medium text-indigo-500 underline'>
             Click here
           </Link>
         </span>
