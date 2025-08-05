@@ -1,7 +1,7 @@
 import React from 'react'
 import data from '../assets/data'
 import { Link, useNavigate } from 'react-router-dom'
-import Item from './item'
+import Item from '../components/Item'
 
 const PopularInWomans = () => {
 
