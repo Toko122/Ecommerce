@@ -21,7 +21,7 @@ mongoDb.connect(process.env.MONGODB, {
      useUnifiedTopology: true
 }).then(() => {
     console.log(`Backend Connected Well`)
-    const PORT = process.env.PORT || 5000
+    const PORT = 5000
     app.listen(PORT, () => {
         console.log(`Server Running On ${PORT} Port`);
     })
