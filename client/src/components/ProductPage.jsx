@@ -22,7 +22,7 @@ const ProductPage = () => {
         e.preventDefault()
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.post('http://localhost:5000/api/cart/addToCart', { productId: product.id }, {
+            const res = await axios.post('/api/cart/addToCart', { productId: product.id }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

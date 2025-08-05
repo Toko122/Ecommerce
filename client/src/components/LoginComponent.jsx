@@ -20,7 +20,7 @@ const LoginComponent = () => {
         e.preventDefault()
         setLoading(true)
         try {
-            const res = await axios.post('http://localhost:5000/api/users/login', form)
+            const res = await axios.post('/api/users/login', form)
             if (res.data.token) {
                 login(res.data.token)
             }

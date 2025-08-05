@@ -21,7 +21,7 @@ const Navbar = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const res = await axios.get('http://localhost:5000/api/cart/getCart', {
+      const res = await axios.get('/api/cart/getCart', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -16,7 +16,7 @@ const Register = () => {
     e.preventDefault()
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/api/users/register', form)
+      const res = await axios.post('/api/users/register', form)
       navigate('/login')
     } catch (err) {
       console.log('error register', err);

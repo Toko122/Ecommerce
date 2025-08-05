@@ -8,7 +8,7 @@ const SelectedItems = () => {
     const fetchCart = async () => {
         try {
 
-            const res = await axios.get('http://localhost:5000/api/cart/getCart')
+            const res = await axios.get('/api/cart/getCart')
             setCartItems(res.data.cartItems)
         } catch (err) {
             console.log('error fetching cart', err)

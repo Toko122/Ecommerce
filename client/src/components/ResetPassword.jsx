@@ -33,7 +33,7 @@ const ResetPassword = () => {
         }
 
         try {
-            const res = await axios.post(`http://localhost:5000/api/email/resetPassword/${token}`, form)
+            const res = await axios.post(`/api/email/resetPassword/${token}`, form)
             setTimeout(() => navigate('/login'), 1000)
         } catch (err) {
             console.log('error resetting password', err)
