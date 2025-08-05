@@ -29,7 +29,7 @@ const SelectedItems = () => {
     const removeCart = async (productId) => {
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.delete('http://localhost:5000/api/cart/deleteCart', {
+            const res = await axios.delete('/api/cart/deleteCart', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
@@ -52,7 +52,7 @@ const SelectedItems = () => {
 
     return (
         <div className='flex flex-col gap-16 px-4 md:px-10 lg:px-24 py-10 overflow-hidden'>
-            {/* Header Row */}
+            
             <div className='hidden md:flex gap-6 font-semibold text-lg border-b pb-4 px-2 justify-between'>
                 <span className='w-24'>Product</span>
                 <span className='w-1/4'>Title</span>
@@ -62,7 +62,7 @@ const SelectedItems = () => {
                 <span className='w-20 text-center'>Remove</span>
             </div>
 
-            {/* Cart Items */}
+           
             {
                 cartItems.map((item) => {
                     const product = all_product.find(p => p.id.toString() === item.productId)
@@ -87,10 +87,10 @@ const SelectedItems = () => {
                 })
             }
 
-            {/* Totals Section */}
+           
             <div className='flex flex-col lg:flex-row gap-12 mt-10 w-full'>
 
-                {/* Cart Totals */}
+               
                 <div className='flex flex-col gap-6 w-full lg:w-1/2 px-4'>
                     <h1 className='font-semibold text-2xl'>Cart Totals</h1>
                     <div className='flex flex-col gap-3 px-4'>
@@ -113,7 +113,7 @@ const SelectedItems = () => {
                     <button className='bg-orange-600 uppercase py-2 px-4 text-white font-semibold cursor-pointer hover:bg-orange-700 transition duration-300'>Proceed to checkout</button>
                 </div>
 
-                {/* Promo Code Input */}
+               
                 <div className='flex flex-col gap-3 w-full lg:w-1/2 px-2'>
                     <p className='text-gray-600'>If you have a promo code, enter it here:</p>
                     <div className='relative'>
