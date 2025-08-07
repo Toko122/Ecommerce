@@ -1,9 +1,11 @@
 import axios from './axios'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {useAuth} from './AuthProvider'
 
 const OAuthSuccess = () => {
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search)
@@ -15,8 +17,13 @@ const OAuthSuccess = () => {
 
       axios.post('https://ecommerce-kboc.onrender.com/api/users/google-login', { name, email })
         .then(res => {
-          localStorage.setItem('token', res.data.token)
+          const token = res.data.token
+          localStorage.setItem('token', token)
+
+          login(token)
+
           navigate('/')
+          
         })
         .catch(err => {
           console.error('OAuth Login error', err)
