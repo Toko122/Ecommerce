@@ -48,7 +48,7 @@ function App() {
             <Route path='/reset-password/:token' element={<ResetPassword />} />
 
             <Route path='/cart' element={<CartPage />} />
-            <Route path="/oauth-success" element={<OauthSuccess />} />
+            <Route path="/oauth-success" element={<OAuthSuccess />} />
 
           </Routes>
 
