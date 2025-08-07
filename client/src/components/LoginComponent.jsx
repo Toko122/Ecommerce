@@ -45,6 +45,7 @@ const LoginComponent = () => {
         <h1 className='font-semibold text-2xl'>Login</h1>
 
         <button
+          type="button"
           onClick={handleGoogleLogin}
           className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
         >

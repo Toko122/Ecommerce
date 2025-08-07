@@ -15,10 +15,18 @@ dotenv.config()
 const userRouter = require('./routes/userRouter')
 const cartRouter = require('./routes/cartRouter')
 const emailRouter = require('./routes/emailRouter')
+const User = require('./models/user')
+const jwt = require('jsonwebtoken')
 
 
 app.use(express.json())
-app.use(cors({origin: 'https://ecommerce-nine-beige-73.vercel.app', credentials: true}))
+app.use(cors({
+  origin: [
+    'https://ecommerce-nine-beige-73.vercel.app',
+    'https://ecommerce-kboc.onrender.com'
+  ], 
+  credentials: true
+}))
 app.use(session({secret: process.env.MYSECRET, resave: false, saveUninitialized: false}))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -37,9 +45,37 @@ passport.use(new GoogleStrategy(
       clientSecret: process.env.CLIENTSECRET,
       callbackURL: 'https://ecommerce-kboc.onrender.com/auth/google/callback'
     },
-     (accesToken, refreshToken, profile, done)=>{
-       console.log('Google Profile: ', profile)
-       return done(null, profile)
+     async (accessToken, refreshToken, profile, done) => {
+       try {
+         console.log('Google Profile: ', profile)
+         
+         // Check if user exists by email or googleId
+         let user = await User.findOne({ 
+           $or: [
+             { email: profile.emails[0].value },
+             { googleId: profile.id }
+           ]
+         })
+         
+         if (!user) {
+           // Create new user
+           user = await User.create({
+             email: profile.emails[0].value,
+             username: profile.displayName,
+             password: 'google-oauth-' + Date.now(), // Unique password for Google users
+             googleId: profile.id
+           })
+         } else if (!user.googleId) {
+           // Update existing user with googleId
+           user.googleId = profile.id
+           await user.save()
+         }
+         
+         return done(null, user)
+       } catch (error) {
+         console.error('Google OAuth error:', error)
+         return done(error, null)
+       }
      }
 ))
 
@@ -50,11 +86,15 @@ app.get('/auth/google', passport.authenticate('google', {
 app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
-      const { displayName, emails } = req.user
-      const name = displayName
-      const email = emails?.[0]?.value
-
-      res.redirect(`https://ecommerce-nine-beige-73.vercel.app/oauth-success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`)
+      try {
+        const user = req.user
+        const token = jwt.sign({id: user.id}, process.env.JWT, {expiresIn: "2d"})
+        
+        res.redirect(`https://ecommerce-nine-beige-73.vercel.app/oauth-success?token=${encodeURIComponent(token)}&name=${encodeURIComponent(user.username)}&email=${encodeURIComponent(user.email)}`)
+      } catch (error) {
+        console.error('OAuth callback error:', error)
+        res.redirect('https://ecommerce-nine-beige-73.vercel.app/login?error=oauth_failed')
+      }
     }
 )
 
