@@ -2,20 +2,20 @@ const Cart = require('../models/cart')
 
 
 exports.addToCart = async (req, res) => {
-    const { productId, quantity } = req.body
+    const { productId } = req.body
     const userId = req.user.id
     try{
      const existingItem = await Cart.findOne({productId, userId})
 
      if(existingItem){
-        existingItem.quantity += quantity
+        existingItem.quantity += 1
         await existingItem.save()
         return res.status(200).json({ cart: existingItem })
      } else{
-        const newCartItem = await Cart.create({
+        const cart = await Cart.create({
             productId, userId, quantity: 1
         })
-        await newCartItem.save()
+        await cart.save()
         res.status(200).json({cart})
      }
     }catch(err){
