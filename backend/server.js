@@ -16,8 +16,9 @@ const userRouter = require('./routes/userRouter')
 const cartRouter = require('./routes/cartRouter')
 const emailRouter = require('./routes/emailRouter')
 
+
 app.use(express.json())
-app.use(cors({origin: 'https://ecommerce-nine-beige-73.vercel.app/', credentials: true}))
+app.use(cors({origin: 'https://ecommerce-nine-beige-73.vercel.app', credentials: true}))
 app.use(session({secret: process.env.MYSECRET, resave: false, saveUninitialized: false}))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -53,7 +54,7 @@ app.get('/auth/google/callback',
       const name = displayName
       const email = emails?.[0]?.value
 
-    res.redirect(`https://ecommerce-nine-beige-73.vercel.app/oauth-success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`)
+      res.redirect(`https://ecommerce-nine-beige-73.vercel.app/oauth-success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`)
     }
 )
 
