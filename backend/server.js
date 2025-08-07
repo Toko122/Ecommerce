@@ -18,7 +18,7 @@ const emailRouter = require('./routes/emailRouter')
 
 app.use(express.json())
 app.use(cors({origin: 'https://ecommerce-nine-beige-73.vercel.app/', credentials: true}))
-app.use(session({secret: 'tokatoka1', resave: false, saveUninitialized: false}))
+app.use(session({secret: process.env.MYSECRET, resave: false, saveUninitialized: false}))
 app.use(passport.initialize())
 app.use(passport.session())
 
