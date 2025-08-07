@@ -1,8 +1,15 @@
 const express = require('express')
 const app = express()
 const mongoDb = require('mongoose')
-const dotenv = require('dotenv')
+
+const passport = require('passport')
+const session = require('express-session')
+const GoogleStrategy = require('passport-google-oauth20').Strategy
 const cors = require('cors')
+
+
+
+const dotenv = require('dotenv')
 dotenv.config()
 
 const userRouter = require('./routes/userRouter')
@@ -10,7 +17,50 @@ const cartRouter = require('./routes/cartRouter')
 const emailRouter = require('./routes/emailRouter')
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({origin: 'https://ecommerce-nine-beige-73.vercel.app/', credentials: true}))
+app.use(session({secret: 'tokatoka1', resave: false, saveUninitialized: false}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.serializeUser((user, done) => {
+    done(null, user)
+})
+
+passport.deserializeUser((user, done) => {
+  done(null, user)
+})
+
+passport.use(new GoogleStrategy(
+     {
+      clientID: '976795715577-eu4u93vv5t29ch39lsbnm9icofnp4ont.apps.googleusercontent.com',
+      clientSecret: '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',
+      callbackURL: 'https://ecommerce-kboc.onrender.com/auth/google/callback'
+    },
+     (accesToken, refreshToken, profile, done)=>{
+       console.log('Google Profile: ', profile)
+       return done(null, profile)
+     }
+))
+
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', {failureRedirect: '/login'}),
+    (req, res) => {
+      const { displayName, emails } = req.user
+      const name = displayName
+      const email = emails?.[0]?.value
+
+    res.redirect(`https://ecommerce-nine-beige-73.vercel.app/oauth-success?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`)
+    }
+)
+
+app.get('/logout', (req, res) => {
+   req.logout()
+   res.redirect('/')
+}) 
 
 app.use('/api/users', userRouter)
 app.use('/api/cart', cartRouter)

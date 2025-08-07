@@ -1,6 +1,6 @@
 import axios from '../axios'
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../AuthProvider'
 
 const LoginComponent = () => {
@@ -9,6 +9,7 @@ const LoginComponent = () => {
   const navigate = useNavigate()
   const { login } = useAuth()
   const [message, setMessage] = useState('')
+  const location = useLocation()
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -34,10 +35,21 @@ const LoginComponent = () => {
     }
   }
 
+  const handleGoogleLogin = () => {
+    window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google'
+  }
+
   return (
     <div className='bg-[#f0c3f6] w-full h-screen flex justify-center items-center'>
       <form onSubmit={handleSubmit} className='bg-white py-8 px-10 flex flex-col justify-start gap-4 pb-24'>
         <h1 className='font-semibold text-2xl'>Login</h1>
+
+        <button
+          onClick={handleGoogleLogin}
+          className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
+        >
+          Continue with Google
+        </button>
 
         <input
           onChange={handleChange}
