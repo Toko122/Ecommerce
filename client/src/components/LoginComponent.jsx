@@ -35,23 +35,14 @@ const LoginComponent = () => {
     }
   }
 
-  const handleGoogleLogin = () => {
-    console.log('Google login initiated')
-    window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google'
-  }
-
   return (
     <div className='bg-[#f0c3f6] w-full h-screen flex justify-center items-center'>
       <form onSubmit={handleSubmit} className='bg-white py-8 px-10 flex flex-col justify-start gap-4 pb-24'>
         <h1 className='font-semibold text-2xl'>Login</h1>
 
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
-        >
-          Continue with Google
-        </button>
+        <Link to="https://ecommerce-kboc.onrender.com/auth/google">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded">Login with Google</button>
+         </Link>
 
         <input
           onChange={handleChange}

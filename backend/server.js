@@ -1,13 +1,10 @@
 const express = require('express')
 const app = express()
 const mongoDb = require('mongoose')
-
-const passport = require('passport')
-const session = require('express-session')
-const GoogleStrategy = require('passport-google-oauth20').Strategy
 const cors = require('cors')
 
-
+const session = require('express-session')
+const passport = require('passport')
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -15,111 +12,26 @@ dotenv.config()
 const userRouter = require('./routes/userRouter')
 const cartRouter = require('./routes/cartRouter')
 const emailRouter = require('./routes/emailRouter')
-const User = require('./models/user')
-const jwt = require('jsonwebtoken')
 
+require('./controllers/googleAuthController')
 
 app.use(express.json())
 app.use(cors({
-  origin: [
-    'https://ecommerce-nine-beige-73.vercel.app',
-    'https://ecommerce-kboc.onrender.com'
-  ], 
-  credentials: true
-}))
-app.use(session({secret: process.env.MYSECRET, resave: false, saveUninitialized: false}))
-app.use(passport.initialize())
-app.use(passport.session())
+  origin: process.env.FRONTEND_URL,
+  credentials: true,}))
 
-passport.serializeUser((user, done) => {
-    done(null, user)
-})
+  app.use(session({
+    secret: process.env.MYSECRET,
+    resave: false,
+    saveUninitialized: false
+  }))
+  
+  app.use(passport.initialize())
+  app.use(passport.session())
 
-passport.deserializeUser((user, done) => {
-  done(null, user)
-})
+  const authRouter = require('./routes/authRouter')
+  app.use('/auth', authRouter)
 
-passport.use(new GoogleStrategy(
-     {
-      clientID: process.env.CLIENTID,
-      clientSecret: process.env.CLIENTSECRET,
-      callbackURL: 'https://ecommerce-kboc.onrender.com/auth/google/callback'
-    },
-     async (accessToken, refreshToken, profile, done) => {
-       try {
-         console.log('Google Profile: ', profile)
-         
-         // Check if user exists by email or googleId
-         let user = await User.findOne({ 
-           $or: [
-             { email: profile.emails[0].value },
-             { googleId: profile.id }
-           ]
-         })
-         
-         if (!user) {
-           // Create new user
-           user = await User.create({
-             email: profile.emails[0].value,
-             username: profile.displayName,
-             password: 'google-oauth-' + Date.now(), // Unique password for Google users
-             googleId: profile.id
-           })
-         } else if (!user.googleId) {
-           // Update existing user with googleId
-           user.googleId = profile.id
-           await user.save()
-         }
-         
-         return done(null, user)
-       } catch (error) {
-         console.error('Google OAuth error:', error)
-         return done(error, null)
-       }
-     }
-))
-
-app.get('/auth/google', (req, res, next) => {
-  console.log('Google OAuth initiated')
-  passport.authenticate('google', {
-    scope: ['profile', 'email']
-  })(req, res, next)
-});
-
-app.get('/auth/google/callback',
-    (req, res, next) => {
-      console.log('Google OAuth callback received')
-      passport.authenticate('google', {failureRedirect: '/login'})(req, res, next)
-    },
-    (req, res) => {
-      try {
-        console.log('Processing OAuth callback')
-        const user = req.user
-        console.log('User from OAuth:', user)
-        
-        if (!user) {
-          console.error('No user found in OAuth callback')
-          return res.redirect('https://ecommerce-nine-beige-73.vercel.app/login?error=no_user')
-        }
-        
-        const token = jwt.sign({id: user.id}, process.env.JWT, {expiresIn: "2d"})
-        console.log('JWT token generated for user:', user.id)
-        
-        const redirectUrl = `https://ecommerce-nine-beige-73.vercel.app/oauth-success?token=${encodeURIComponent(token)}&name=${encodeURIComponent(user.username)}&email=${encodeURIComponent(user.email)}`
-        console.log('Redirecting to:', redirectUrl)
-        
-        res.redirect(redirectUrl)
-      } catch (error) {
-        console.error('OAuth callback error:', error)
-        res.redirect('https://ecommerce-nine-beige-73.vercel.app/login?error=oauth_failed')
-      }
-    }
-)
-
-app.get('/logout', (req, res) => {
-   req.logout()
-   res.redirect('/')
-}) 
 
 app.use('/api/users', userRouter)
 app.use('/api/cart', cartRouter)
