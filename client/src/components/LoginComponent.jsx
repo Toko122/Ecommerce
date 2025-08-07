@@ -37,18 +37,19 @@ const LoginComponent = () => {
 
   return (
     <div className='bg-[#f0c3f6] w-full h-screen flex justify-center items-center'>
-      <form onSubmit={handleSubmit} className='bg-white py-8 px-10 flex flex-col justify-start gap-4 pb-24'>
-        <h1 className='font-semibold text-2xl'>Login</h1>
+      <form onSubmit={handleSubmit} className='bg-white mt-12 py-8 px-10 flex flex-col justify-start items-center gap-4 pb-24'>
+        <h1 className='font-semibold text-4xl'>Login</h1>
 
 
         <button
           type="button"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className=" mt-4 text-white px-8 py-2 flex cursor-pointer hover:bg-[#e2e2e2] transition duration-300 border rounded-[20px] bg-gray-100  w-full h-fit gap-14 items-center"
           onClick={() => {
             window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google?prompt=select_account'
           }}
         >
-          Login with Google
+          <img src='/Google__G__logo.svg.png' className='w-12 h-12' />
+          <span className='font-semibold text-black text-2xl'>Login with Google</span>
         </button>
 
 
