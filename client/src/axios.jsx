@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL: 'https://ecommerce-kboc.onrender.com'
+    baseURL: 'https://ecommerce-kboc.onrender.com',
+    withCredentials: true,
 })
 
 instance.interceptors.request.use((config) => {
