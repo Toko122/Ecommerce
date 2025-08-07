@@ -13,7 +13,7 @@ const OAuthSuccess = () => {
     if (email) {
       localStorage.setItem('user', JSON.stringify({ name, email }))
 
-      axios.post('https://ecommerce-kboc.onrender.com/api/users/google-login', { name, email })
+      axios.post('https://ecommerce-kboc.onrender.com/api/google/google-login', { name, email })
         .then(res => {
           localStorage.setItem('token', res.data.token)
           navigate('/')
