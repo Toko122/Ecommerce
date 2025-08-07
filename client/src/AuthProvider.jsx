@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {jwtDecode} from 'jwt-decode'
 
 const AuthContext = createContext()
@@ -7,7 +6,6 @@ const AuthContext = createContext()
 const AuthProvider = ({ children }) => {
 
     const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('token'))
-    const navigate = useNavigate()
 
     const login = (token) => {
         localStorage.setItem('token', token)
@@ -32,8 +30,6 @@ const AuthProvider = ({ children }) => {
             console.log('error aoutLogout', err);
          }
     }
-
-
 
     return (
         <AuthContext.Provider value={{login, logout, loggedIn, autoLogout}}>

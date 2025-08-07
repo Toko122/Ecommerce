@@ -79,18 +79,36 @@ passport.use(new GoogleStrategy(
      }
 ))
 
-app.get('/auth/google', passport.authenticate('google', {
-  scope: ['profile', 'email']
-}));
+app.get('/auth/google', (req, res, next) => {
+  console.log('Google OAuth initiated')
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })(req, res, next)
+});
 
 app.get('/auth/google/callback',
-    passport.authenticate('google', {failureRedirect: '/login'}),
+    (req, res, next) => {
+      console.log('Google OAuth callback received')
+      passport.authenticate('google', {failureRedirect: '/login'})(req, res, next)
+    },
     (req, res) => {
       try {
+        console.log('Processing OAuth callback')
         const user = req.user
-        const token = jwt.sign({id: user.id}, process.env.JWT, {expiresIn: "2d"})
+        console.log('User from OAuth:', user)
         
-        res.redirect(`https://ecommerce-nine-beige-73.vercel.app/oauth-success?token=${encodeURIComponent(token)}&name=${encodeURIComponent(user.username)}&email=${encodeURIComponent(user.email)}`)
+        if (!user) {
+          console.error('No user found in OAuth callback')
+          return res.redirect('https://ecommerce-nine-beige-73.vercel.app/login?error=no_user')
+        }
+        
+        const token = jwt.sign({id: user.id}, process.env.JWT, {expiresIn: "2d"})
+        console.log('JWT token generated for user:', user.id)
+        
+        const redirectUrl = `https://ecommerce-nine-beige-73.vercel.app/oauth-success?token=${encodeURIComponent(token)}&name=${encodeURIComponent(user.username)}&email=${encodeURIComponent(user.email)}`
+        console.log('Redirecting to:', redirectUrl)
+        
+        res.redirect(redirectUrl)
       } catch (error) {
         console.error('OAuth callback error:', error)
         res.redirect('https://ecommerce-nine-beige-73.vercel.app/login?error=oauth_failed')

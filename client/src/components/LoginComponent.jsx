@@ -36,6 +36,7 @@ const LoginComponent = () => {
   }
 
   const handleGoogleLogin = () => {
+    console.log('Google login initiated')
     window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google'
   }
 
