@@ -43,13 +43,13 @@ const LoginComponent = () => {
 
         <button
           type="button"
-          className=" mt-4 text-white px-8 py-2 flex cursor-pointer hover:bg-[#e2e2e2] transition duration-300 border rounded-[20px] bg-gray-100  w-full h-fit gap-14 items-center"
+          className=" mt-4 text-white px-4 md:px-8 py-2 flex cursor-pointer hover:bg-[#e2e2e2] transition duration-300 border rounded-[20px] bg-gray-100  w-full h-fit gap-14 items-center"
           onClick={() => {
             window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google?prompt=select_account'
           }}
         >
           <img src='/Google__G__logo.svg.png' className='w-12 h-12' />
-          <span className='font-semibold text-black text-2xl'>Login with Google</span>
+          <span className='font-semibold text-black md:text-2xl text-1xl'>Login with Google</span>
         </button>
 
 
