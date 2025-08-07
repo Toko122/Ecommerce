@@ -37,7 +37,7 @@ app.use(cors({
 app.use('/api/users', userRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/email', emailRouter)
-app.use('/api/google', googleRouter)
+
 
 mongoDb.connect(process.env.MONGODB)
   .then(() => {

@@ -1,7 +1,6 @@
 const express = require('express')
 const passport = require('passport')
 const router = express.Router()
-const {googleLogin} = require('../controllers/googleAuthController')
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 
@@ -13,6 +12,5 @@ router.get('/google/callback',
     res.redirect(redirectUrl)
   })
 
-  router.post('/google-login', googleLogin)
 
 module.exports = router

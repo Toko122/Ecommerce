@@ -45,7 +45,7 @@ const LoginComponent = () => {
           type="button"
           className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={() => {
-            window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google'
+            window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google?prompt=select_account'
           }}
         >
           Login with Google
