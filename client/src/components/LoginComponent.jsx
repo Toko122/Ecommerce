@@ -40,9 +40,17 @@ const LoginComponent = () => {
       <form onSubmit={handleSubmit} className='bg-white py-8 px-10 flex flex-col justify-start gap-4 pb-24'>
         <h1 className='font-semibold text-2xl'>Login</h1>
 
-        <Link to="https://ecommerce-kboc.onrender.com/auth/google">
-          <button type="button" className="bg-blue-500 text-white px-4 py-2 rounded">Login with Google</button>
-         </Link>
+
+        <button
+          type="button"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={() => {
+            window.location.href = 'https://ecommerce-kboc.onrender.com/auth/google'
+          }}
+        >
+          Login with Google
+        </button>
+
 
         <input
           onChange={handleChange}
