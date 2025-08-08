@@ -15,7 +15,10 @@ const googleRouter = require('./routes/authRouter')
 require('./controllers/googleAuthController')
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+  origin: 'https://ecommerce-nine-beige-73.vercel.app',
+  credentials: true
+}))
 
 
 app.use('/api/users', userRouter)
