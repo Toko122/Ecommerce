@@ -3,8 +3,6 @@ const app = express()
 const mongoDb = require('mongoose')
 const cors = require('cors')
 
-const session = require('express-session')
-const passport = require('passport')
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -17,26 +15,14 @@ const googleRouter = require('./routes/authRouter')
 require('./controllers/googleAuthController')
 
 app.use(express.json())
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,}))
-
-  app.use(session({
-    secret: process.env.MYSECRET,
-    resave: false,
-    saveUninitialized: false
-  }))
-  
-  app.use(passport.initialize())
-  app.use(passport.session())
-
-  const authRouter = require('./routes/authRouter')
-  app.use('/auth', authRouter)
+app.use(cors())
 
 
 app.use('/api/users', userRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/email', emailRouter)
+app.use('/api/google', googleRouter)
+
 
 
 mongoDb.connect(process.env.MONGODB)

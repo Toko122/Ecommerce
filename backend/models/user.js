@@ -9,4 +9,4 @@ const UserSchema = mongoose.Schema({
     resetTokenExpire: {type: Date}
 })
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.models.User || mongoose.model('User', UserSchema)

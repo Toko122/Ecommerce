@@ -1,43 +1,40 @@
-const passport = require('passport')
-const GoogleStrategy = require('passport-google-oauth20').Strategy
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+const User = require('../models/User');
 
-passport.use(new GoogleStrategy({
-  clientID: process.env.CLIENTID,
-  clientSecret: process.env.CLIENTSECRET,
-  callbackURL: process.env.GOOGLE_CALLBACK_URL,
-},
-(accessToken, refreshToken, profile, done) => {
-  const userData = {
-    name: profile.displayName,
-    email: profile.emails[0].value,
-  }
-  done(null, userData)
-}))
+const client = new OAuth2Client(process.env.CLIENTID)
 
-passport.serializeUser((user, done) => {
-  done(null, user)
-})
+exports.googleLogin = async (req,res) => {
+    const {token} = req.body
 
-passport.deserializeUser((user, done) => {
-  done(null, user)
-})
+    if (!token) return res.status(400).json({ message: 'Token is required' });
 
-exports.googleLogin = async(req, res) => {
-     const {email, name} = req.body
-     try{
-        let user = await User.findOne({email})
+    try{
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.CLIENTID
+      })
 
-        if (!user) {
-            user = await User.create({ name, email })
-        }
+      const payload = ticket.getPayload()
+      const {sub: googleId, username, email} = payload
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT, { expiresIn: '2d' })
-        res.json({ token })
+      let user = await User.findOne({email})
 
-     }catch(err){
-        console.error(err)
-        res.status(500).json({ message: 'Google login failed' })
-     }
+      if(!user){
+        user = await User.create({
+          googleId, username, email
+        })
+      } else if(!user.googleId){
+        user.googleId = googleId
+        user.username = user.username || username
+        await user.save()
+      }
+
+      const appToken = jwt.sign({id: user._id, email: user.email}, process.env.JWT, {expiresIn: '2d'})
+
+      res.json({ token: appToken, user });
+    }catch(err){
+    console.error('Google auth error:', err);
+    return res.status(401).json({ message: 'Invalid Google token' });
+    }
 }
