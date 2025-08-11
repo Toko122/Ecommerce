@@ -103,13 +103,32 @@ const ProductPage = () => {
                             </div>
 
                             <button
-                                onClick={() => {
-                                    loggedIn ? addToCart() : navigate('/login')
+                                onClick={(e) => {
+                                    if (loggedIn) {
+                                        addToCart(e);
+                                    } else {
+                                        navigate('/login');
+                                    }
                                 }}
                                 className='uppercase bg-red-600 py-2 px-5 text-white w-fit font-semibold cursor-pointer hover:bg-red-800 transition duration-300 rounded-md'
                             >
                                 Add To Cart
                             </button>
+
+                            {succesMessage && (
+  <div className="relative bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md max-w-xs" role="alert">
+    <strong className="font-bold">Success! </strong>
+    <span className="block sm:inline">{succesMessage}</span>
+    <button
+      onClick={() => setSuccesMessage('')}
+      className="absolute top-1 right-2 text-green-700 hover:text-green-900 font-bold"
+      aria-label="Close message"
+    >
+      &times;
+    </button>
+  </div>
+)}
+
 
                             <span className='text-lg md:text-xl font-semibold'>
                                 Category: <span className='font-normal text-[#2a2a2a]'>{product.category}</span>
