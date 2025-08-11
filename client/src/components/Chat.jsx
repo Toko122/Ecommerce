@@ -13,11 +13,16 @@ const Chat = ({ userId }) => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        socketRef.current = io(SOCKET_URL, {
-            auth: (cb) => cb({ token }),
-            transports: ['websocket'],
-            autoConnect: false,
-        });
+        
+if (!token) {
+  console.error("No token found");
+} else {
+  socketRef.current = io(SOCKET_URL, {
+    auth: { token },
+    transports: ['websocket'],
+    autoConnect: false
+  });
+}
 
         socketRef.current.connect();
 
