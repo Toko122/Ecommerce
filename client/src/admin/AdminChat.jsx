@@ -23,7 +23,7 @@ const AdminChat = ({ token }) => {
       setMessages(prev => [...prev, { ...message, senderName: user.username, senderId: user.id }]);
     });
 
-    // თუ ადმინი პასუხობს და შენს ჩატში ელის ახალ მესიჯს:
+    
     socketRef.current.on('message:sent', ({ message }) => {
       setMessages(prev => [...prev, { ...message, senderName: 'You' }]);
     });
@@ -33,7 +33,7 @@ const AdminChat = ({ token }) => {
     };
   }, [token]);
 
-  // მომხმარებლის მესიჯზე დაჭერის შემდეგ ვაჩვენებთ ჩატს და ვსავუთავებთ userId-ს
+  
   const openChat = (userId, username) => {
     setSelectedUserId(userId);
     setSelectedUsername(username);

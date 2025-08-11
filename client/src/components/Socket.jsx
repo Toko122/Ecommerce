@@ -1,9 +1,12 @@
 import { io } from 'socket.io-client';
-const SOCKET_URL = 'https://ecommerce-kboc.onrender.com';
 
-const Socket = io(SOCKET_URL, {
+const token = localStorage.getItem('token');
+
+const Socket = io('https://ecommerce-kboc.onrender.com', {
   transports: ['websocket'],
-  auth: { token: localStorage.getItem('token') },
+  auth:{
+    token: token
+  },
 });
 
 export default Socket;

@@ -11,24 +11,24 @@ const Chat = ({ token, userId }) => {
 
   useEffect(() => {
     if (!token) return;
-
+  
     socketRef.current = io(SOCKET_URL, {
       auth: { token },
       transports: ['websocket'],
     });
-
+  
     socketRef.current.on('connect_error', (err) => {
       console.error('Socket connect error:', err.message);
     });
-
+  
     socketRef.current.on('message:received', ({ message }) => {
       setMessages((prev) => [...prev, message]);
     });
-
+  
     socketRef.current.on('message:sent', ({ message }) => {
       setMessages((prev) => [...prev, message]);
     });
-
+  
     return () => {
       socketRef.current.disconnect();
     };

@@ -55,21 +55,20 @@ mongoDb.connect(process.env.MONGODB)
   const userSocketMap = new Map()
 
   io.use(async(socket, next) => {
-      try{
-       const token = socket.handshake.auth?.token
-       if (!token) return next(new Error('No token'));
-
-       const payload = jwt.verify(token, process.env.JWT)
-       const user = await User.findById(payload.id)
-       if (!user) return next(new Error('Invalid user'));
-
-       socket.user = user
-       next()
-
-      }catch (err) {
-        next(new Error('Auth error'));
+    try {
+      const token = socket.handshake.auth?.token;
+      if (!token) return next(new Error('No token'));
+  
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(payload.id);
+      if (!user) return next(new Error('Invalid user'));
+  
+      socket.user = user;
+      next();
+    } catch (err) {
+      next(new Error('Auth error'));
     }
-  })
+  });
 
   io.on('connection', (socket) => {
      const user = socket.user
