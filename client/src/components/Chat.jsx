@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = 'https://ecommerce-kboc.onrender.com';
 
 const Chat = ({ token, userId }) => {
   const [messages, setMessages] = useState([]);
