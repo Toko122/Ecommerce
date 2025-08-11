@@ -22,6 +22,7 @@ import ResetPassword from './components/ResetPassword'
 import { Admin } from './admin/Admin'
 import Messages from './admin/Messages'
 import Chat from './components/Chat'
+import { useAuth } from './AuthProvider'
 
 
 function App() {
