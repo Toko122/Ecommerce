@@ -47,13 +47,10 @@ mongoDb.connect(process.env.MONGODB)
   .then(() => {
     console.log(`✅ Backend Connected to MongoDB`);
     const PORT = 5000;
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   })
-  .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
-  });
 
   const userSocketMap = new Map()
 
@@ -82,6 +79,7 @@ mongoDb.connect(process.env.MONGODB)
      socket.join(room)
 
      if(user.isAdmin){
+         socket.join('admins')
          Chat.find().then(chats => chats.forEach(c => socket.join(`chat_${c.user}`)))
      }
 
@@ -104,7 +102,7 @@ mongoDb.connect(process.env.MONGODB)
           const chat = await Chat.findOne({user: userId})
           if (!chat) return;
 
-          const msg = await Chat.create({chat: chat._id, sender: user._id, text})
+          const msg = await Message.create({chat: chat._id, sender: user._id, text})
           io.to(`chat_${userId}`).emit('message:received', {message: msg})
           socket.emit('admin:sent', {message: msg})
 

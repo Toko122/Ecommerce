@@ -10,18 +10,23 @@ const Chat = ({ token, userId }) => {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io(SOCKET_URL, { auth: { token } });
+    if (!token) return;
+
+    socketRef.current = io(SOCKET_URL, {
+      auth: { token },
+      transports: ['websocket'],
+    });
 
     socketRef.current.on('connect_error', (err) => {
       console.error('Socket connect error:', err.message);
     });
 
     socketRef.current.on('message:received', ({ message }) => {
-      setMessages(prev => [...prev, message]);
+      setMessages((prev) => [...prev, message]);
     });
 
-    socketRef.current.on('message:sent', (message) => {
-      setMessages(prev => [...prev, message]);
+    socketRef.current.on('message:sent', ({ message }) => {
+      setMessages((prev) => [...prev, message]);
     });
 
     return () => {
@@ -46,30 +51,31 @@ const Chat = ({ token, userId }) => {
       </div>
       {isOpen && (
         <>
-          <div className="flex-grow p-3 overflow-y-auto max-h-64 space-y-2">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`p-2 rounded-lg max-w-[75%] ${
-                  msg.sender === userId ? 'bg-green-200 self-end' : 'bg-gray-200 self-start'
-                }`}
-              >
-                <div className="text-sm font-semibold">
-                  {msg.sender === userId ? 'You' : 'Admin'}
+          <div className="flex-grow p-3 overflow-y-auto max-h-64 space-y-2 flex flex-col">
+            {messages.map((msg, i) => {
+              const isSender = String(msg.sender) === String(userId);
+              return (
+                <div
+                  key={i}
+                  className={`p-2 rounded-lg max-w-[75%] ${
+                    isSender ? 'bg-green-200 self-end' : 'bg-gray-200 self-start'
+                  }`}
+                >
+                  <div className="text-sm font-semibold">{isSender ? 'You' : 'Admin'}</div>
+                  <div>{msg.text || msg.message}</div>
+                  <div className="text-xs text-gray-500 text-right">
+                    {new Date(msg.createdAt || Date.now()).toLocaleTimeString()}
+                  </div>
                 </div>
-                <div>{msg.text || msg.message}</div>
-                <div className="text-xs text-gray-500 text-right">
-                  {new Date(msg.createdAt || Date.now()).toLocaleTimeString()}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="flex p-3 border-t border-gray-300">
             <input
               type="text"
               value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && sendMessage()}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Type your message..."
               className="flex-grow border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
