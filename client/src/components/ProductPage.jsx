@@ -33,6 +33,7 @@ const ProductPage = () => {
             })
 
             setSuccesMessage('Item added in your cart')
+            setTimeout(() => setSuccesMessage(''), 2500)
 
             window.dispatchEvent(new Event('cartUpdated'))
 
@@ -121,7 +122,7 @@ const ProductPage = () => {
     <span className="block sm:inline">{succesMessage}</span>
     <button
       onClick={() => setSuccesMessage('')}
-      className="absolute top-1 right-2 text-green-700 hover:text-green-900 font-bold"
+      className="absolute cursor-pointer top-1 right-2 text-green-700 hover:text-green-900 font-bold"
       aria-label="Close message"
     >
       &times;
