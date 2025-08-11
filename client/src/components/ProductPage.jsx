@@ -19,7 +19,7 @@ const ProductPage = () => {
     const { id } = useParams()
     const product = all_product.find((p) => p.id.toString() === id)
     const [succesMessage, setSuccesMessage] = useState('')
-    const {loggedIn} = useAuth()
+    const { loggedIn } = useAuth()
     const navigate = useNavigate()
 
     const addToCart = async (e) => {
@@ -38,7 +38,7 @@ const ProductPage = () => {
 
         } catch (err) {
             console.log('error add to cart', err);
-           
+
         }
     }
 
@@ -51,31 +51,31 @@ const ProductPage = () => {
 
                 <div className='p-2 flex flex-col lg:flex-row gap-10'>
 
-                <div className='flex flex-col lg:flex-row gap-6 w-full h-auto lg:h-[700px]'>
-  
-                 <div className='w-full lg:w-[160px] h-full'>
-                   <div className='grid grid-cols-4 lg:grid-cols-1 gap-4 w-full h-full'>
-                     {[1, 2, 3, 4].map((_, i) => (
-                       <div key={i} className='w-full h-full aspect-square'>
-                         <img
-                           src={product.image}
-                           alt=''
-                           className='w-full h-full object-cover object-center rounded'
-                         />
-                       </div>
-                     ))}
-                   </div>
-                 </div>
+                    <div className='flex flex-col lg:flex-row gap-6 w-full h-auto lg:h-[700px]'>
 
-  
-                 <div className='flex-1 h-full'>
-                   <img
-                     src={product.image}
-                     alt=''
-                     className='w-full h-full object-cover object-center rounded'
-                   />
-                 </div>
-               </div>
+                        <div className='w-full lg:w-[160px] h-full'>
+                            <div className='grid grid-cols-4 lg:grid-cols-1 gap-4 w-full h-full'>
+                                {[1, 2, 3, 4].map((_, i) => (
+                                    <div key={i} className='w-full h-full aspect-square'>
+                                        <img
+                                            src={product.image}
+                                            alt=''
+                                            className='w-full h-full object-cover object-center rounded'
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+
+                        <div className='flex-1 h-full'>
+                            <img
+                                src={product.image}
+                                alt=''
+                                className='w-full h-full object-cover object-center rounded'
+                            />
+                        </div>
+                    </div>
 
                     <div className='flex flex-col gap-6 w-full lg:w-1/2'>
 
@@ -104,7 +104,7 @@ const ProductPage = () => {
 
                             <button
                                 onClick={() => {
-                                    loggedIn ? addToCart : navigate('/login')
+                                    loggedIn ? addToCart() : navigate('/login')
                                 }}
                                 className='uppercase bg-red-600 py-2 px-5 text-white w-fit font-semibold cursor-pointer hover:bg-red-800 transition duration-300 rounded-md'
                             >
