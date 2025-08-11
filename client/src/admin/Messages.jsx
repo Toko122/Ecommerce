@@ -1,6 +1,6 @@
 import React from 'react'
 import AdminSideBar from './AdminSideBar'
-import AdminChat from './AdminChat'
+
 
 const Messages = () => {
     return (
@@ -8,7 +8,7 @@ const Messages = () => {
             
             <div className='flex gap-12 items-center'>
             <AdminSideBar />
-            <AdminChat />
+
             </div>
 
         </div>
