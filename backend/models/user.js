@@ -6,7 +6,8 @@ const UserSchema = mongoose.Schema({
     password: {type: String},
     googleId: {type: String, unique: true, sparse: true},
     resetToken: {type: String},
-    resetTokenExpire: {type: Date}
+    resetTokenExpire: {type: Date},
+    isAdmin: {type: Boolean, default: false}
 })
 
 module.exports = mongoose.models.User || mongoose.model('User', UserSchema)

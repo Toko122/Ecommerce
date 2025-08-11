@@ -19,10 +19,17 @@ import ForgotPassword from './components/ForgotPassword'
 import AuthProvider from './AuthProvider'
 import { CartPage } from './pages/CartPage'
 import ResetPassword from './components/ResetPassword'
+import { Admin } from './admin/Admin'
+import Messages from './admin/Messages'
+import Chat from './components/Chat'
 
 
 function App() {
 
+  const { token, user, loggedIn } = useAuth()
+  const userId = user?.id || user?._id
+
+  const isAdmin = user?.isAdmin || false
 
   return (
     <>
@@ -48,9 +55,16 @@ function App() {
             <Route path='/reset-password/:token' element={<ResetPassword />} />
 
             <Route path='/cart' element={<CartPage />} />
-            
+
+            <Route path='/admin' element={<Admin />} />
+            <Route path='/admin/messages' element={<Messages />} />
+
 
           </Routes>
+
+          {!isAdmin && loggedIn && token && userId && (
+            <Chat token={token} userId={userId} />
+          )}
 
           <Footer />
         </AuthProvider>
