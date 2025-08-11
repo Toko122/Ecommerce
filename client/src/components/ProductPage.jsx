@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Breadcrumbs from './Breadcrumbs'
 import all_product from '../assets/all_product'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import StraRating from './StraRating'
 import axios from '../axios'
+import { useAuth } from '../AuthProvider'
 
 const sizes = [
     { 1: <button className='p-2 bg-gray-100 rounded-md px-4 cursor-pointer hover:bg-gray-300 transition duration-200'>S</button> },
@@ -17,6 +18,9 @@ const ProductPage = () => {
 
     const { id } = useParams()
     const product = all_product.find((p) => p.id.toString() === id)
+    const [succesMessage, setSuccesMessage] = useState('')
+    const {loggedIn} = useAuth()
+    const navigate = useNavigate()
 
     const addToCart = async (e) => {
         e.preventDefault()
@@ -28,10 +32,13 @@ const ProductPage = () => {
                 }
             })
 
+            setSuccesMessage('Item added in your cart')
+
             window.dispatchEvent(new Event('cartUpdated'))
 
         } catch (err) {
             console.log('error add to cart', err);
+           
         }
     }
 
@@ -96,7 +103,9 @@ const ProductPage = () => {
                             </div>
 
                             <button
-                                onClick={addToCart}
+                                onClick={() => {
+                                    loggedIn ? addToCart : navigate('/login')
+                                }}
                                 className='uppercase bg-red-600 py-2 px-5 text-white w-fit font-semibold cursor-pointer hover:bg-red-800 transition duration-300 rounded-md'
                             >
                                 Add To Cart

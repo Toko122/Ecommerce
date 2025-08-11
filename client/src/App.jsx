@@ -19,7 +19,7 @@ import ForgotPassword from './components/ForgotPassword'
 import AuthProvider from './AuthProvider'
 import { CartPage } from './pages/CartPage'
 import ResetPassword from './components/ResetPassword'
-import OAuthSuccess from './OauthSuccess'
+
 
 function App() {
 
@@ -48,7 +48,7 @@ function App() {
             <Route path='/reset-password/:token' element={<ResetPassword />} />
 
             <Route path='/cart' element={<CartPage />} />
-            <Route path="/oauth-success" element={<OAuthSuccess />} />
+            
 
           </Routes>
 

@@ -38,7 +38,7 @@ const LoginComponent = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const res = await axios.post('/api/google/google-login', {
+      const res = await axios.post('/api/users/google-login', {
         token: credentialResponse.credential
       })
 
