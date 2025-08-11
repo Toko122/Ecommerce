@@ -26,53 +26,52 @@ import { useAuth } from './AuthProvider'
 
 
 function App() {
+  return (
+    <ShopContextProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ShopContextProvider>
+  )
+}
 
-  const { token, user, loggedIn } = useAuth()
-  const userId = user?.id || user?._id
-
-  const isAdmin = user?.isAdmin || false
+function AppContent() {
+  const { token, user, loggedIn } = useAuth();
+  const userId = user?.id || user?._id;
+  const isAdmin = user?.isAdmin || false;
 
   return (
     <>
+      <Navbar />
 
+      <Routes>
+        <Route path='/' element={<Home />} />
 
-      <ShopContextProvider>
-        <AuthProvider>
-          <Navbar />
+        <Route path='/men' element={<ShopCategory banner={men_banner} category='men' />} />
+        <Route path='/women' element={<ShopCategory banner={women_banner} category='women' />} />
+        <Route path='/kid' element={<ShopCategory banner={kid_banner} category='kid' />} />
 
-          <Routes>
-            <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
 
-            <Route path='/men' element={<ShopCategory banner={men_banner} category='men' />} />
-            <Route path='/women' element={<ShopCategory banner={women_banner} category='women' />} />
-            <Route path='/kid' element={<ShopCategory banner={kid_banner} category='kid' />} />
+        <Route path='/product/:id' element={<ProductPage />} />
 
-            <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/forgotPassword' element={<ForgotPassword />} />
+        <Route path='/reset-password/:token' element={<ResetPassword />} />
 
-            <Route path='/product/:id' element={<ProductPage />} />
+        <Route path='/cart' element={<CartPage />} />
 
-            <Route path='/register' element={<Register />} />
-            <Route path='/forgotPassword' element={<ForgotPassword />} />
-            <Route path='/reset-password/:token' element={<ResetPassword />} />
+        <Route path='/admin' element={<Admin />} />
+        <Route path='/admin/messages' element={<Messages />} />
+      </Routes>
 
-            <Route path='/cart' element={<CartPage />} />
+      {!isAdmin && loggedIn && token && userId && (
+        <Chat token={token} userId={userId} />
+      )}
 
-            <Route path='/admin' element={<Admin />} />
-            <Route path='/admin/messages' element={<Messages />} />
-
-
-          </Routes>
-
-          {!isAdmin && loggedIn && token && userId && (
-            <Chat token={token} userId={userId} />
-          )}
-
-          <Footer />
-        </AuthProvider>
-      </ShopContextProvider>
-
+      <Footer />
     </>
   )
 }
 
-export default App
+export default App;
